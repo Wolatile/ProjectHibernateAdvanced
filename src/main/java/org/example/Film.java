@@ -2,9 +2,10 @@ package org.example;
 
 import jakarta.persistence.*;
 import org.hibernate.annotations.Type;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import java.math.BigDecimal;
-import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.time.Year;
 
 @Entity
@@ -26,11 +27,11 @@ public class Film {
 
     @ManyToOne
     @JoinColumn(name = "language_id")
-    private Language languageId;
+    private Language language;
 
     @ManyToOne
     @JoinColumn(name = "original_language_id")
-    private Language originalLanguageId;
+    private Language originalLanguage;
 
     @Column(name = "rental_duration")
     private byte rentalDuration;
@@ -50,5 +51,6 @@ public class Film {
     private String specialFeatures;
 
     @Column(name = "last_update")
-    private Timestamp lastUpdate;
+    @UpdateTimestamp
+    private LocalDateTime lastUpdate;
 }
