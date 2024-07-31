@@ -12,7 +12,7 @@ public class Actor {
     @Id
     @Column(name = "actor_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private short id;
+    private Short id;
 
     @Column(name = "first_name", columnDefinition = "varchar(45)")
     private String firstName;
@@ -30,11 +30,11 @@ public class Actor {
             inverseJoinColumns = @JoinColumn(name = "film_id", referencedColumnName = "film_id"))
     private Set<Film> films = new HashSet<Film>();
 
-    public short getId() {
+    public Short getId() {
         return id;
     }
 
-    public void setId(short id) {
+    public void setId(Short id) {
         this.id = id;
     }
 

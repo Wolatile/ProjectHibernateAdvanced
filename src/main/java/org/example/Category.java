@@ -12,7 +12,7 @@ public class Category {
     @Id
     @Column(name = "category_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private byte id;
+    private Byte id;
 
     @Column(columnDefinition = "varchar(25)")
     private String name;
@@ -27,11 +27,11 @@ public class Category {
             inverseJoinColumns = @JoinColumn(name = "film_id", referencedColumnName = "film_id"))
     private Set<Film> films = new HashSet<Film>();
 
-    public byte getId() {
+    public Byte getId() {
         return id;
     }
 
-    public void setId(byte id) {
+    public void setId(Byte id) {
         this.id = id;
     }
 

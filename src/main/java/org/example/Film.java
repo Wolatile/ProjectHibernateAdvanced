@@ -15,7 +15,7 @@ public class Film {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "film_id")
-    private short id;
+    private Short id;
 
     private String title;
 
@@ -35,12 +35,12 @@ public class Film {
     private Language originalLanguage;
 
     @Column(name = "rental_duration")
-    private byte rentalDuration;
+    private Byte rentalDuration;
 
     @Column(name = "rental_rate")
     private BigDecimal rentalRate;
 
-    private short length;
+    private Short length;
 
     @Column(name = "replacement_cost")
     private BigDecimal replacementCost;
@@ -67,15 +67,11 @@ public class Film {
             inverseJoinColumns = @JoinColumn(name = "category_id", referencedColumnName = "category_id"))
     private Set<Category> categories = new HashSet<Category>();
 
-    @OneToOne
-    @JoinColumn(name = "film_text_id")
-    private FilmText text;
-
-    public short getId() {
+    public Short getId() {
         return id;
     }
 
-    public void setId(short id) {
+    public void setId(Short id) {
         this.id = id;
     }
 
@@ -119,11 +115,11 @@ public class Film {
         this.originalLanguage = originalLanguage;
     }
 
-    public byte getRentalDuration() {
+    public Byte getRentalDuration() {
         return rentalDuration;
     }
 
-    public void setRentalDuration(byte rentalDuration) {
+    public void setRentalDuration(Byte rentalDuration) {
         this.rentalDuration = rentalDuration;
     }
 
@@ -135,11 +131,11 @@ public class Film {
         this.rentalRate = rentalRate;
     }
 
-    public short getLength() {
+    public Short getLength() {
         return length;
     }
 
-    public void setLength(short length) {
+    public void setLength(Short length) {
         this.length = length;
     }
 
@@ -189,13 +185,5 @@ public class Film {
 
     public void setCategories(Set<Category> categories) {
         this.categories = categories;
-    }
-
-    public FilmText getText() {
-        return text;
-    }
-
-    public void setText(FilmText text) {
-        this.text = text;
     }
 }
