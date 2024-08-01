@@ -1,4 +1,4 @@
-package org.example;
+package com.example.domain;
 
 import jakarta.persistence.*;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -7,40 +7,51 @@ import java.time.LocalDateTime;
 import java.util.*;
 
 @Entity
-@Table(schema = "movie", name = "category")
-public class Category {
+@Table(schema = "movie", name = "actor")
+public class Actor {
     @Id
-    @Column(name = "category_id")
+    @Column(name = "actor_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Byte id;
+    private Short id;
 
-    @Column(columnDefinition = "varchar(25)")
-    private String name;
+    @Column(name = "first_name", columnDefinition = "varchar(45)")
+    private String firstName;
+
+    @Column(name = "last_name", columnDefinition = "varchar(45)")
+    private String lastName;
 
     @Column(name = "last_update")
     @UpdateTimestamp
     private LocalDateTime lastUpdate;
 
     @ManyToMany
-    @JoinTable(name = "film_category",
-            joinColumns = @JoinColumn(name = "category_id", referencedColumnName = "category_id"),
+    @JoinTable(name = "film_actor",
+            joinColumns = @JoinColumn(name = "actor_id", referencedColumnName = "actor_id"),
             inverseJoinColumns = @JoinColumn(name = "film_id", referencedColumnName = "film_id"))
     private Set<Film> films = new HashSet<Film>();
 
-    public Byte getId() {
+    public Short getId() {
         return id;
     }
 
-    public void setId(Byte id) {
+    public void setId(Short id) {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public String getFirstName() {
+        return firstName;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
     }
 
     public LocalDateTime getLastUpdate() {

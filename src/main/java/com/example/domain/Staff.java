@@ -1,7 +1,6 @@
-package org.example;
+package com.example.domain;
 
 import jakarta.persistence.*;
-import org.hibernate.annotations.Type;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;

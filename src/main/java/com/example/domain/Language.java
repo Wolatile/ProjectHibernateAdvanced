@@ -1,4 +1,4 @@
-package org.example;
+package com.example.domain;
 
 import jakarta.persistence.*;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -6,34 +6,34 @@ import org.hibernate.annotations.UpdateTimestamp;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(schema = "movie", name = "country")
-public class Country {
+@Table(schema = "movie", name = "language")
+public class Language {
     @Id
-    @Column(name = "country_id")
+    @Column(name = "language_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Short id;
+    private Byte id;
 
-    @Column(columnDefinition = "varchar(50)")
-    private String country;
+    @Column(columnDefinition = "char")
+    private String name;
 
     @Column(name = "last_update")
     @UpdateTimestamp
     private LocalDateTime lastUpdate;
 
-    public Short getId() {
+    public Byte getId() {
         return id;
     }
 
-    public void setId(Short id) {
+    public void setId(Byte id) {
         this.id = id;
     }
 
-    public String getCountry() {
-        return country;
+    public String getName() {
+        return name;
     }
 
-    public void setCountry(String country) {
-        this.country = country;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public LocalDateTime getLastUpdate() {

@@ -1,4 +1,4 @@
-package org.example;
+package com.example.domain;
 
 import jakarta.persistence.*;
 import org.hibernate.annotations.Type;

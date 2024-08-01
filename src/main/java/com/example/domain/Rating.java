@@ -1,4 +1,4 @@
-package org.example;
+package com.example.domain;
 
 public enum Rating {
     G("G"),
