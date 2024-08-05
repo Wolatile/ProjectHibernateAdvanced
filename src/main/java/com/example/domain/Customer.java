@@ -31,7 +31,7 @@ public class Customer {
     @JoinColumn(name = "address_id")
     private Address address;
 
-    private Byte active;
+    private Boolean active;
 
     @Column(name = "create_date")
     @CreationTimestamp
@@ -89,11 +89,11 @@ public class Customer {
         this.address = address;
     }
 
-    public Byte getActive() {
+    public Boolean getActive() {
         return active;
     }
 
-    public void setActive(Byte active) {
+    public void setActive(Boolean active) {
         this.active = active;
     }
 
