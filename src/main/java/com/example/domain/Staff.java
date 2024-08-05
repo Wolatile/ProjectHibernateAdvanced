@@ -34,7 +34,7 @@ public class Staff {
     @JoinColumn(name = "store_id")
     private Store store;
 
-    private Byte active;
+    private Boolean active;
 
     @Column(columnDefinition = "varchar(16)")
     private String username;
@@ -102,11 +102,11 @@ public class Staff {
         this.store = store;
     }
 
-    public Byte getActive() {
+    public Boolean getActive() {
         return active;
     }
 
-    public void setActive(Byte active) {
+    public void setActive(Boolean active) {
         this.active = active;
     }
 

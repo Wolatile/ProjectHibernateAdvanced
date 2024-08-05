@@ -1,14 +1,13 @@
 package com.example;
 
 import com.example.dao.*;
-import com.example.domain.Address;
-import com.example.domain.Customer;
-import com.example.domain.Store;
+import com.example.domain.*;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.cfg.Environment;
 
+import java.time.*;
 import java.util.Properties;
 
 public class Main {
@@ -41,8 +40,22 @@ public class Main {
         properties.put(Environment.HBM2DDL_AUTO, "validate");
 
         sessionFactory = new Configuration()
-                .setProperties(properties)
-                .addPackage("com.example.domain")
+                .addAnnotatedClass(Actor.class)
+                .addAnnotatedClass(Address.class)
+                .addAnnotatedClass(Category.class)
+                .addAnnotatedClass(City.class)
+                .addAnnotatedClass(Country.class)
+                .addAnnotatedClass(Customer.class)
+                .addAnnotatedClass(Feature.class)
+                .addAnnotatedClass(Film.class)
+                .addAnnotatedClass(FilmText.class)
+                .addAnnotatedClass(Inventory.class)
+                .addAnnotatedClass(Language.class)
+                .addAnnotatedClass(Payment.class)
+                .addAnnotatedClass(Rental.class)
+                .addAnnotatedClass(Staff.class)
+                .addAnnotatedClass(Store.class)
+                .addProperties(properties)
                 .buildSessionFactory();
 
         actorDAO = new ActorDAO(sessionFactory);
@@ -65,14 +78,23 @@ public class Main {
     public static void main(String[] args) {
         Main main = new Main();
         Customer customer = main.createCustomer();
+        Rental rent = main.rentFilm(customer);
     }
 
     private Customer createCustomer() {
         try (Session session = sessionFactory.getCurrentSession()) {
             session.beginTransaction();
-            Store store = storeDAO.getById(1);
+            Store store = storeDAO.getItems(0, 1).get(0);
 
-            Address address = addressDAO.getById(1);
+            City city = cityDAO.getByName("Zhoushan");
+
+            Address address = new Address();
+            address.setAddress("Test street 11");
+            address.setCity(city);
+            address.setDistrict("Testoviy");
+            address.setPhone("88005553535");
+            address.setPostalCode("99999");
+            addressDAO.create(address);
 
             Customer customer = new Customer();
             customer.setFirstName("Test");
@@ -84,8 +106,43 @@ public class Main {
             customerDAO.create(customer);
 
             session.getTransaction().commit();
-
             return customer;
+        }
+    }
+
+    private Rental rentFilm(Customer customer) {
+        try (Session session = sessionFactory.getCurrentSession()) {
+            session.beginTransaction();
+            Inventory inventory = inventoryDAO.getItems(0, 1).get(0);
+
+            Rental rental = new Rental();
+            rental.setCustomer(customer);
+            rental.setRentalDate(LocalDateTime.now());
+            rental.setStaff(customer.getStore().getStaff());
+            if (rentalDAO.getByInventory(inventory) == null || rentalDAO.getByInventory(inventory).getReturnDate() != null) {
+                rental.setInventory(inventory);
+            }
+            rentalDAO.create(rental);
+
+            Payment payment = new Payment();
+            payment.setCustomer(customer);
+            payment.setStaff(rental.getStaff());
+            payment.setRental(rental);
+            payment.setAmount(rental.getInventory().getFilm().getRentalRate());
+            payment.setPaymentDate(LocalDateTime.now());
+            paymentDAO.create(payment);
+
+            session.getTransaction().commit();
+            return rental;
+        }
+    }
+
+    private void returnFilm(Rental rental) {
+        try (Session session = sessionFactory.getCurrentSession()) {
+            session.beginTransaction();
+            rental.setReturnDate(LocalDateTime.now());
+            rentalDAO.update(rental);
+            session.getTransaction().commit();
         }
     }
 }
