@@ -77,8 +77,13 @@ public class Main {
 
     public static void main(String[] args) {
         Main main = new Main();
-        Customer customer = main.createCustomer();
-        Rental rent = main.rentFilm(customer);
+        main.customerReturnInventoryToStore();
+//        Session session = main.sessionFactory.getCurrentSession();
+//        session.beginTransaction();
+//        Inventory inventory = main.inventoryDAO.getItems(0, 1).get(0);
+//        session.getTransaction().commit();
+//        Customer customer = main.createCustomer();
+//        Rental rent = main.rentFilm(customer);
     }
 
     private Customer createCustomer() {
@@ -137,11 +142,15 @@ public class Main {
         }
     }
 
-    private void returnFilm(Rental rental) {
+    private void customerReturnInventoryToStore() {
         try (Session session = sessionFactory.getCurrentSession()) {
             session.beginTransaction();
+
+            Rental rental = rentalDAO.getAnyUnreturnedRental();
             rental.setReturnDate(LocalDateTime.now());
+
             rentalDAO.update(rental);
+
             session.getTransaction().commit();
         }
     }

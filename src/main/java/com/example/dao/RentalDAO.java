@@ -15,4 +15,10 @@ public class RentalDAO extends AbstractHibernateDAO<Rental> {
         query.setParameter("name", inventory);
         return query.getSingleResult();
     }
+
+    public Rental getAnyUnreturnedRental() {
+        Query<Rental> query = getCurrentSession().createQuery("select r from Rental r where r.returnDate is null", Rental.class);
+        query.setMaxResults(1);
+        return query.getSingleResult();
+    }
 }
