@@ -11,8 +11,9 @@ public class RentalDAO extends AbstractHibernateDAO<Rental> {
     }
 
     public Rental getByInventory(Inventory inventory) {
-        Query<Rental> query = getCurrentSession().createQuery("select r from Rental r where r.inventory = :name", Rental.class);
-        query.setParameter("name", inventory);
+        Query<Rental> query = getCurrentSession().createQuery("select r from Rental r where r.inventory = :inventoryName", Rental.class);
+        query.setParameter("inventoryName", inventory);
+        query.setMaxResults(1);
         return query.getSingleResult();
     }
 

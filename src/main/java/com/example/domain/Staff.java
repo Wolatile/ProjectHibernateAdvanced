@@ -1,6 +1,7 @@
 package com.example.domain;
 
 import jakarta.persistence.*;
+import org.hibernate.annotations.Type;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
@@ -13,10 +14,10 @@ public class Staff {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Byte id;
 
-    @Column(name = "first_name", columnDefinition = "varchar(45)")
+    @Column(name = "first_name")
     private String firstName;
 
-    @Column(name = "last_name", columnDefinition = "varchar(45)")
+    @Column(name = "last_name")
     private String lastName;
 
     @ManyToOne
@@ -27,19 +28,18 @@ public class Staff {
     @Column(columnDefinition = "BLOB")
     private byte[] picture;
 
-    @Column(columnDefinition = "varchar(50)")
     private String email;
 
     @ManyToOne
     @JoinColumn(name = "store_id")
     private Store store;
 
-    private Boolean active;
+    @Column(name = "active", columnDefinition = "BIT")
+    @Type(type = "org.hibernate.type.NumericBooleanType")
+    private Boolean isActive;
 
-    @Column(columnDefinition = "varchar(16)")
     private String username;
 
-    @Column(columnDefinition = "varchar(40)")
     private String password;
 
     @Column(name = "last_update")
@@ -103,11 +103,11 @@ public class Staff {
     }
 
     public Boolean getActive() {
-        return active;
+        return isActive;
     }
 
-    public void setActive(Boolean active) {
-        this.active = active;
+    public void setActive(Boolean isActive) {
+        this.isActive = isActive;
     }
 
     public String getUsername() {

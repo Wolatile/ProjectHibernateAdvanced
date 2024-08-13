@@ -13,23 +13,19 @@ public class Address {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Short id;
 
-    @Column(columnDefinition = "varchar(50)")
     private String address;
 
-    @Column(columnDefinition = "varchar(50)")
     private String address2;
 
-    @Column(columnDefinition = "varchar(20)")
     private String district;
 
     @ManyToOne
     @JoinColumn(name = "city_id")
     private City city;
 
-    @Column(name = "postal_code", columnDefinition = "varchar(10)")
+    @Column(name = "postal_code")
     private String postalCode;
 
-    @Column(columnDefinition = "varchar(20)")
     private String phone;
 
     @Column(name = "last_update")

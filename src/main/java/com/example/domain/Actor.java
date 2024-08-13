@@ -14,10 +14,10 @@ public class Actor {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Short id;
 
-    @Column(name = "first_name", columnDefinition = "varchar(45)")
+    @Column(name = "first_name")
     private String firstName;
 
-    @Column(name = "last_name", columnDefinition = "varchar(45)")
+    @Column(name = "last_name")
     private String lastName;
 
     @Column(name = "last_update")
@@ -28,7 +28,7 @@ public class Actor {
     @JoinTable(name = "film_actor",
             joinColumns = @JoinColumn(name = "actor_id", referencedColumnName = "actor_id"),
             inverseJoinColumns = @JoinColumn(name = "film_id", referencedColumnName = "film_id"))
-    private Set<Film> films = new HashSet<Film>();
+    private Set<Film> films;
 
     public Short getId() {
         return id;

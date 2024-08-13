@@ -14,7 +14,6 @@ public class Category {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Byte id;
 
-    @Column(columnDefinition = "varchar(25)")
     private String name;
 
     @Column(name = "last_update")
@@ -25,7 +24,7 @@ public class Category {
     @JoinTable(name = "film_category",
             joinColumns = @JoinColumn(name = "category_id", referencedColumnName = "category_id"),
             inverseJoinColumns = @JoinColumn(name = "film_id", referencedColumnName = "film_id"))
-    private Set<Film> films = new HashSet<Film>();
+    private Set<Film> films;
 
     public Byte getId() {
         return id;

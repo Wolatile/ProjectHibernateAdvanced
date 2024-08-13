@@ -16,8 +16,8 @@ import static java.util.Objects.isNull;
 @Table(schema = "movie", name = "film")
 public class Film {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "film_id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Short id;
 
     private String title;
@@ -28,7 +28,7 @@ public class Film {
 
     @Column(name = "release_year", columnDefinition = "year")
     @Convert(converter = YearConverter.class)
-    private Year releaseYear;
+    private Year year;
 
     @ManyToOne
     @JoinColumn(name = "language_id")
@@ -64,13 +64,13 @@ public class Film {
     @JoinTable(name = "film_actor",
             joinColumns = @JoinColumn(name = "film_id", referencedColumnName = "film_id"),
             inverseJoinColumns = @JoinColumn(name = "actor_id", referencedColumnName = "actor_id"))
-    private Set<Actor> actors = new HashSet<Actor>();
+    private Set<Actor> actors;
 
     @ManyToMany
     @JoinTable(name = "film_category",
             joinColumns = @JoinColumn(name = "film_id",referencedColumnName = "film_id"),
             inverseJoinColumns = @JoinColumn(name = "category_id", referencedColumnName = "category_id"))
-    private Set<Category> categories = new HashSet<Category>();
+    private Set<Category> categories;
 
     public Short getId() {
         return id;
@@ -97,11 +97,11 @@ public class Film {
     }
 
     public Year getReleaseYear() {
-        return releaseYear;
+        return year;
     }
 
     public void setReleaseYear(Year releaseYear) {
-        this.releaseYear = releaseYear;
+        this.year = releaseYear;
     }
 
     public Language getLanguage() {

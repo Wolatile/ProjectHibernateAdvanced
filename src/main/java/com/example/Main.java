@@ -7,8 +7,11 @@ import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.cfg.Environment;
 
+import java.math.BigDecimal;
 import java.time.*;
+import java.util.HashSet;
 import java.util.Properties;
+import java.util.Set;
 
 public class Main {
     private final SessionFactory sessionFactory;
@@ -77,13 +80,10 @@ public class Main {
 
     public static void main(String[] args) {
         Main main = new Main();
-        main.customerReturnInventoryToStore();
-//        Session session = main.sessionFactory.getCurrentSession();
-//        session.beginTransaction();
-//        Inventory inventory = main.inventoryDAO.getItems(0, 1).get(0);
-//        session.getTransaction().commit();
+//        main.customerReturnInventoryToStore();
 //        Customer customer = main.createCustomer();
 //        Rental rent = main.rentFilm(customer);
+        Film film = main.createFilm();
     }
 
     private Customer createCustomer() {
@@ -152,6 +152,30 @@ public class Main {
             rentalDAO.update(rental);
 
             session.getTransaction().commit();
+        }
+    }
+
+    private Film createFilm () {
+        try (Session session = sessionFactory.getCurrentSession()) {
+            session.beginTransaction();
+
+            Film film = new Film();
+            film.setTitle("Testovik");
+            film.setDescription("testing testovyi testovik");
+            film.setReleaseYear(Year.of(2024));
+            film.setLanguage(languageDAO.getItems(0, 1).get(0));
+            film.setRentalDuration((byte) 5);
+            film.setRentalRate(BigDecimal.valueOf(99.99));
+            film.setLength((short) 90);
+            film.setReplacementCost(BigDecimal.valueOf(999.99));
+            film.setRating(Rating.G);
+            Set<Feature> features = new HashSet<>();
+            features.add(Feature.getFeatureByValue("Trailers"));
+            film.setSpecialFeatures(features);
+            filmDAO.create(film);
+
+            session.getTransaction().commit();
+            return film;
         }
     }
 }

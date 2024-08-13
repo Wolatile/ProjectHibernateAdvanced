@@ -13,7 +13,6 @@ public class City {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Short id;
 
-    @Column(columnDefinition = "varchar(50)")
     private String city;
 
     @ManyToOne

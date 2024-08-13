@@ -8,7 +8,6 @@ import org.hibernate.annotations.Type;
 public class FilmText {
     @Id
     @Column(name = "film_id")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Short id;
 
     private String title;
