@@ -96,12 +96,12 @@ public class Film {
         this.description = description;
     }
 
-    public Year getReleaseYear() {
+    public Year getYear() {
         return year;
     }
 
-    public void setReleaseYear(Year releaseYear) {
-        this.year = releaseYear;
+    public void setYear(Year year) {
+        this.year = year;
     }
 
     public Language getLanguage() {

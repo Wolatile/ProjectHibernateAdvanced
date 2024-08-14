@@ -10,6 +10,7 @@ import org.hibernate.cfg.Environment;
 import java.math.BigDecimal;
 import java.time.*;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Properties;
 import java.util.Set;
 
@@ -22,7 +23,6 @@ public class Main {
     private final CityDAO cityDAO;
     private final CountryDAO countryDAO;
     private final CustomerDAO customerDAO;
-    private final FeatureDAO featureDAO;
     private final FilmDAO filmDAO;
     private final FilmTextDAO filmTextDAO;
     private final InventoryDAO inventoryDAO;
@@ -67,7 +67,6 @@ public class Main {
         cityDAO = new CityDAO(sessionFactory);
         countryDAO = new CountryDAO(sessionFactory);
         customerDAO = new CustomerDAO(sessionFactory);
-        featureDAO = new FeatureDAO(sessionFactory);
         filmDAO = new FilmDAO(sessionFactory);
         filmTextDAO = new FilmTextDAO(sessionFactory);
         inventoryDAO = new InventoryDAO(sessionFactory);
@@ -80,10 +79,10 @@ public class Main {
 
     public static void main(String[] args) {
         Main main = new Main();
-//        main.customerReturnInventoryToStore();
 //        Customer customer = main.createCustomer();
-//        Rental rent = main.rentFilm(customer);
-        Film film = main.createFilm();
+//        main.customerReturnInventoryToStore();
+//        main.customerRentInventory(customer);
+        main.createFilm();
     }
 
     private Customer createCustomer() {
@@ -115,30 +114,36 @@ public class Main {
         }
     }
 
-    private Rental rentFilm(Customer customer) {
+    private void customerRentInventory(Customer customer) {
         try (Session session = sessionFactory.getCurrentSession()) {
             session.beginTransaction();
-            Inventory inventory = inventoryDAO.getItems(0, 1).get(0);
+
+            Film film = filmDAO.getFirstAvailableFilmForRent();
+            Store store = customer.getStore();
+
+            Inventory inventory = new Inventory();
+            inventory.setFilm(film);
+            inventory.setStore(store);
+            inventoryDAO.create(inventory);
+
+            Staff staff = store.getStaff();
 
             Rental rental = new Rental();
             rental.setCustomer(customer);
             rental.setRentalDate(LocalDateTime.now());
-            rental.setStaff(customer.getStore().getStaff());
-            if (rentalDAO.getByInventory(inventory) == null || rentalDAO.getByInventory(inventory).getReturnDate() != null) {
-                rental.setInventory(inventory);
-            }
+            rental.setStaff(staff);
+            rental.setInventory(inventory);
             rentalDAO.create(rental);
 
             Payment payment = new Payment();
             payment.setCustomer(customer);
-            payment.setStaff(rental.getStaff());
+            payment.setStaff(staff);
             payment.setRental(rental);
-            payment.setAmount(rental.getInventory().getFilm().getRentalRate());
+            payment.setAmount(BigDecimal.valueOf(99.99));
             payment.setPaymentDate(LocalDateTime.now());
             paymentDAO.create(payment);
 
             session.getTransaction().commit();
-            return rental;
         }
     }
 
@@ -155,27 +160,37 @@ public class Main {
         }
     }
 
-    private Film createFilm () {
+    private void createFilm () {
         try (Session session = sessionFactory.getCurrentSession()) {
             session.beginTransaction();
 
+            Language language = languageDAO.getItems(0,20).stream().unordered().findAny().get();
+            List<Category> categories = categoryDAO.getItems(0, 5);
+            List<Actor> actors = actorDAO.getItems(0, 10);
+
             Film film = new Film();
+            film.setActors(new HashSet<>(actors));
+            film.setCategories(new HashSet<>(categories));
             film.setTitle("Testovik");
             film.setDescription("testing testovyi testovik");
-            film.setReleaseYear(Year.of(2024));
-            film.setLanguage(languageDAO.getItems(0, 1).get(0));
+            film.setYear(Year.now());
+            film.setLanguage(language);
+            film.setOriginalLanguage(language);
             film.setRentalDuration((byte) 5);
             film.setRentalRate(BigDecimal.valueOf(99.99));
             film.setLength((short) 90);
             film.setReplacementCost(BigDecimal.valueOf(999.99));
             film.setRating(Rating.G);
-            Set<Feature> features = new HashSet<>();
-            features.add(Feature.getFeatureByValue("Trailers"));
-            film.setSpecialFeatures(features);
+            film.setSpecialFeatures(Set.of(Feature.TRAILERS, Feature.COMMENTARIES, Feature.DELETED_SCENES));
             filmDAO.create(film);
 
+            FilmText filmText = new FilmText();
+            filmText.setFilm(film);
+            filmText.setDescription("Test description of the film");
+            filmText.setTitle("Testovik");
+            filmTextDAO.create(filmText);
+
             session.getTransaction().commit();
-            return film;
         }
     }
 }

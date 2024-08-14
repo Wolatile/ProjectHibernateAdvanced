@@ -2,6 +2,7 @@ package com.example.domain;
 
 import jakarta.persistence.*;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.Type;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
@@ -18,24 +19,25 @@ public class Customer {
     @JoinColumn(name = "store_id")
     private Store store;
 
-    @Column(name = "first_name", columnDefinition = "varchar(45)")
+    @Column(name = "first_name")
     private String firstName;
 
-    @Column(name = "last_name", columnDefinition = "varchar(45)")
+    @Column(name = "last_name")
     private String lastName;
 
-    @Column(columnDefinition = "varchar(50)")
     private String email;
 
     @OneToOne
     @JoinColumn(name = "address_id")
     private Address address;
 
-    private Boolean active;
+    @Column(name = "active", columnDefinition = "BIT")
+    @Type(type = "org.hibernate.type.NumericBooleanType")
+    private Boolean isActive;
 
     @Column(name = "create_date")
     @CreationTimestamp
-    private LocalDateTime createDate;
+    private LocalDateTime creationDate;
 
     @Column(name = "last_update")
     @UpdateTimestamp
@@ -90,19 +92,19 @@ public class Customer {
     }
 
     public Boolean getActive() {
-        return active;
+        return isActive;
     }
 
-    public void setActive(Boolean active) {
-        this.active = active;
+    public void setActive(Boolean isActive) {
+        this.isActive = isActive;
     }
 
     public LocalDateTime getCreateDate() {
-        return createDate;
+        return creationDate;
     }
 
-    public void setCreateDate(LocalDateTime createDate) {
-        this.createDate = createDate;
+    public void setCreateDate(LocalDateTime creationDate) {
+        this.creationDate = creationDate;
     }
 
     public LocalDateTime getLastUpdate() {
